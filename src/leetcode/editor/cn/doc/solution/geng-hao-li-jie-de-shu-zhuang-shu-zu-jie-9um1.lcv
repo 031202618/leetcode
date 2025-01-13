@@ -1,0 +1,69 @@
+> Problem: [2407. 最长递增子序列 II](https://leetcode.cn/problems/longest-increasing-subsequence-ii/description/)
+
+[TOC]
+
+# 思路
+
+> 我是看题解才了解该题的树状数组解法的，看完之后大为震惊，没想到树状数组居然还可以处理区间的max问题，这个数据结构确实牛逼。但是看了大家的代码，感觉树状数组的查询部分不容易理解，在此给大家提供一个更好的实现，具体请看代码中的query部分。
+
+# Code
+
+* []
+
+```C++
+class BIT {
+    vector<int> arr;
+    vector<int> ori;
+    int size;
+
+public:
+    int lowbit(int x) {
+        return x&-x;
+    }
+
+    void init(int n) {
+        arr.resize(n+1);
+        ori.resize(n+1);
+        size=n;
+    }
+
+    void update(int idx,int v) {
+        ori[idx]=v;
+        while(idx<=size) {
+            arr[idx]=max(arr[idx],v);
+            idx+=lowbit(idx);
+        }
+    }
+
+    int query(int start,int end) {
+        int ans=0;
+        while(end>=start) {
+            //当bit中end位置保留的区间范围不超过start时就用bit中的值
+            if(end-lowbit(end)>=start) {
+                ans=max(ans,arr[end]);
+                end-=lowbit(end);
+            } else {//否则就用原始的每个位置的值
+                ans=max(ans,ori[end]);
+                end--;
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums, int k) {
+        int ans=0;
+        BIT bit;
+        bit.init(1e5);
+        for(auto n:nums) {
+            int len=bit.query(max(1,n-k),n-1);
+            bit.update(n,len+1);
+        }
+
+        return bit.query(1,1e5);
+    }
+};
+```
+

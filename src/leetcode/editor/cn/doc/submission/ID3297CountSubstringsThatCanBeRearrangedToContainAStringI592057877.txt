@@ -1,0 +1,31 @@
+    class Solution {
+        public long validSubstringCount(String word1, String word2) {
+            int[] target = new int[26];
+            char[] charArray = word2.toCharArray();
+            for (char c : charArray) {
+                target[c - 'a']++;
+            }
+            int l = 0;
+            int r = 0;
+            char[] ch1 = word1.toCharArray();
+            long ret = 0;
+            while (r < ch1.length) {
+                target[ch1[r] - 'a']--;
+                while (match(target) && l <= r) {
+                    ret += (ch1.length - r);
+                    target[ch1[l] - 'a']++;
+                    l++;
+
+                }
+                r++;
+            }
+            return ret;
+        }
+
+        public boolean match(int[] target) {
+            return Arrays.stream(target).allMatch(e -> e <= 0);
+        }
+    }
+
+//runtime:421 ms
+//memory:46.4 MB

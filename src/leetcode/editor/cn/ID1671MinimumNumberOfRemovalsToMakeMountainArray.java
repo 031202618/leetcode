@@ -21,6 +21,7 @@ public class ID1671MinimumNumberOfRemovalsToMakeMountainArray {
             Collections.reverse(integers);
             int[] dp2 = calc(integers.stream().mapToInt(i -> i).toArray());
             int min = Integer.MAX_VALUE;
+            String a = "asd";
             for (int left = 2; left < nums.length; left++) {
                 int l = dp1[left];
                 int r = dp2[nums.length - left + 1];

@@ -1,18 +1,19 @@
 package leetcode.editor.cn;
 
-public class ID3218MinimumCostForCuttingCakeI {
+public class ID673NumberOfLongestIncreasingSubsequence {
 
     public static void main(String[] args) {
-        Solution solution = new ID3218MinimumCostForCuttingCakeI().new Solution();
+        Solution solution = new ID673NumberOfLongestIncreasingSubsequence().new Solution();
         StringBuilder sb = new StringBuilder();                //执行测试
+        solution.findNumberOfLIS(new int[]{1, 3, 5, 4, 7});
         System.out.println(sb);
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
-        public int minimumCost(int m, int n, int[] horizontalCut, int[] verticalCut) {
+
+        public int findNumberOfLIS(int[] nums) {
             return 0;
-//            return minimumCost(horizontalCut, 0, horizontalCut.length - 1, verticalCut, 0, verticalCut.length - 1);
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
