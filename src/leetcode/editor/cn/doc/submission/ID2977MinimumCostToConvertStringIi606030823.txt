@@ -1,0 +1,97 @@
+    class Solution {
+
+        int[][] minCost;
+        Map<String, Integer> strMap;
+
+        public long minimumCost(String source, String target, String[] original, String[] changed, int[] cost) {
+            strMap = new HashMap<>();
+            int idx = 0;
+            for (int i = 0; i < original.length; i++) {
+                if (!strMap.containsKey(original[i])) {
+                    strMap.put(original[i], idx++);
+                }
+                if (!strMap.containsKey(changed[i])) {
+                    strMap.put(changed[i], idx++);
+                }
+            }
+            buildMinCost(original, changed, cost);
+            long[] dp = new long[source.length() + 1];
+            Arrays.fill(dp, Long.MAX_VALUE / 2);
+            dp[0] = 0;
+            for (int i = 1; i <= source.length(); i++) {
+                if (source.charAt(i - 1) == target.charAt(i - 1)) {
+                    dp[i] = dp[i - 1];
+                }
+                for (String ori : original) {
+                    if (eq(source, i - 1, ori)) {
+                        String tar = target.substring(i - ori.length(), i);
+                        if(!strMap.containsKey(tar)){
+                            continue;
+                        }
+                        int cost_ = minCost[strMap.get(ori)][strMap.get(tar)];
+                        if (cost_ != -1) {
+                            dp[i] = Math.min(dp[i], dp[i - ori.length()] + cost_);
+                        }
+                    }
+                }
+            }
+            return dp[source.length()] == Long.MAX_VALUE / 2 ? -1 : dp[source.length()];
+        }
+
+        public boolean eq(String source, int lastIdx, String cmp) {
+            for (int i = lastIdx, j = cmp.length() - 1; j >= 0; i--, j--) {
+                if (i < 0 || source.charAt(i) != cmp.charAt(j)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void buildMinCost(String[] original, String[] changed, int[] cost) {
+            int[][] cost2 = new int[strMap.size()][strMap.size()];
+            minCost = new int[strMap.size()][strMap.size()];
+            for (int i = 0; i < strMap.size(); i++) {
+                Arrays.fill(cost2[i], -1);
+                Arrays.fill(minCost[i], Integer.MAX_VALUE / 2);
+            }
+            for (int i = 0; i < original.length; i++) {
+                int oIdx = strMap.get(original[i]);
+                int cIdx = strMap.get(changed[i]);
+                cost2[oIdx][cIdx] = cost[i];
+                minCost[oIdx][cIdx] = cost[i];
+            }
+            //dp[k][i][j] = dp[k-1][i][j], dp[k-1][i][k] + cost[k][j].
+            // dp[i][j] = min dp[i][j], dp[i][k] + cost[k][j];
+            for (int k = 0; k < strMap.size(); k++) {
+                for (int i = 0; i < strMap.size(); i++)
+                    for (int j = 0; j < strMap.size(); j++) {
+                        if (cost2[k][j] != -1 && minCost[i][k] != Integer.MAX_VALUE / 2) {
+                            minCost[i][j] = Math.min(minCost[i][j], minCost[i][k] + cost2[k][j]);
+                        }
+                    }
+            }
+
+            for (int i = 0; i < strMap.size(); i++) {
+                for (int j = 0; j < strMap.size(); j++) {
+                    if (minCost[i][j] == Integer.MAX_VALUE / 2) {
+                        minCost[i][j] = -1;
+                    }
+                }
+            }
+        }
+    }
+
+//total_testcases:647
+//total_correct:454
+//input_formatted:"fjybg"
+"apyyt"
+["bg","xr","cc","ip","vq","po","ym","rh","vw","lf","lo","ee","qv","yr","f","w","i","u","g","a","e","f","s","r","p","j","o","g","i","u"]
+["xr","cc","ip","vq","po","ym","rh","vw","lf","lo","ee","qv","yr","yt","w","i","u","g","a","e","f","s","r","p","a","o","g","i","u","p"]
+[97733,90086,87125,85361,75644,46301,21616,79538,52507,95884,79353,61127,58665,96031,95035,12116,41158,91096,47819,88522,25493,80186,66981,87597,56691,86820,89031,99954,41271,39699]
+//expected_output:1628332
+//code_output:-1
+//last_testcase:"fjybg"
+"apyyt"
+["bg","xr","cc","ip","vq","po","ym","rh","vw","lf","lo","ee","qv","yr","f","w","i","u","g","a","e","f","s","r","p","j","o","g","i","u"]
+["xr","cc","ip","vq","po","ym","rh","vw","lf","lo","ee","qv","yr","yt","w","i","u","g","a","e","f","s","r","p","a","o","g","i","u","p"]
+[97733,90086,87125,85361,75644,46301,21616,79538,52507,95884,79353,61127,58665,96031,95035,12116,41158,91096,47819,88522,25493,80186,66981,87597,56691,86820,89031,99954,41271,39699]

@@ -1,0 +1,726 @@
+#### 方法一：广度优先搜索 + 平衡树
+
+**思路与算法**
+
+本题要求从下标 $p$ 的位置不经过 $\textit{banned}$ 转移到其它所有位置的最少转移次数。
+
+不难想到使用广度优先搜索解决此题，对于每一个位置 $i$，枚举所有的转移方式，即翻转哪个子数组，可得到 $i$ 能够转移到的位置。但该做法时间复杂度较高，为 $O(n(n - k))$，因为共有 $n$ 个位置，每个位置有 $O(n - k + 1)$ 个子数组可以翻转。可以发现，很多位置 $i$ 被重复检查了，实际上位置 $i$ 一旦可达就不需要再次检查。我们需要优化转移的方式。
+
+首先考虑位置 $i$ 可以转移到的位置。对于子数组 $[L,R]$ 中的任意下标 $i$，翻转后的下标为 $L+R-i$。当子数组向左或向右滑动时，$L$ 和 $R$ 同时增加或减少 $1$，那么翻转后的下标就增加或减少 $2$。也就是说，奇偶数下标之间的转移是分别连续的。比如，对于下标 $i$ 来说，其经过翻转可达的位置只有 $k-i-1,k-i+1,k-i+3,...,i+k-1$ 等。
+
+接着考虑翻转的范围，容易发现其受数组边界的约束。如果不考虑数组的起始和结束范围，$i$ 经过一次翻转的范围是 $[i-k+1,i+k-1]$。当子数组在最左边时，$L=0,R=k-1$，$i$ 翻转后是 $0+(k-1)-i=k-i-1$。当子数组在最右边时，$L=n-k,R=n-1$，$i$ 翻转后是 $(n-k)+(n-1)-i=2n-k-i-1$。综上，$i$ 经过 $1$ 次翻转后的范围是：
+
+$$
+[\max(i-k+1,k-i-1),\min(i+k-1,2n-k-i-1)]
+$$
+
+最后，我们可以使用平衡树分别维护偶数下标和奇数下标，使用广度优先搜索检查所有位置。由于平衡树中维护的是尚未到达的位置，对于 $\textit{banned}$ 中的下标，只需不将其添加到平衡树中即可。
+
+**代码**
+
+* [sol1-C++]
+
+```C++
+class Solution {
+public:
+    vector<int> minReverseOperations(int n, int p, vector<int>& banned, int k) {
+        unordered_set<int> ban{banned.begin(), banned.end()};
+        set<int> sets[2];
+        for (int i = 0; i < n; ++i) {
+            if (i != p && !ban.count(i)) {
+                sets[i % 2].insert(i);
+            }
+        }
+        vector<int> ans(n, -1);
+        queue<int> q;
+        q.push(p);
+        ans[p] = 0;
+        while (!q.empty()) {
+            int i = q.front();
+            q.pop();
+            int mn = max(i - k + 1, k - i - 1);
+            int mx = min(i + k - 1, n * 2 - k - i - 1);
+            auto it = sets[mx % 2].lower_bound(mn);
+            while (it != sets[mx % 2].end()) {
+                if (*it > mx) {
+                    break;
+                }
+                ans[*it] = ans[i] + 1;
+                q.push(*it);
+                it = sets[mn % 2].erase(it);
+            }
+        }
+        return ans;
+    }
+};
+```
+
+* [sol1-Java]
+
+```Java
+class Solution {
+    public int[] minReverseOperations(int n, int p, int[] banned, int k) {
+        Set<Integer> ban = new HashSet<>();
+        for (int b : banned) ban.add(b);
+        TreeSet<Integer>[] sets = new TreeSet[2];
+        sets[0] = new TreeSet<>();
+        sets[1] = new TreeSet<>();
+        for (int i = 0; i < n; ++i) {
+            if (i != p && !ban.contains(i)) {
+                sets[i % 2].add(i);
+            }
+        }
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(p);
+        ans[p] = 0;
+        while (!q.isEmpty()) {
+            int i = q.poll();
+            int mn = Math.max(i - k + 1, k - i - 1);
+            int mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+            TreeSet<Integer> set = sets[mx % 2];
+            Integer it = sets[mx % 2].ceiling(mn);
+            while (it != null && it <= mx) {
+                ans[it] = ans[i] + 1;
+                q.add(it);
+                set.remove(it);
+                it = set.ceiling(mn);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+* [sol1-C#]
+
+```C#
+public class Solution {
+    public int[] MinReverseOperations(int n, int p, int[] banned, int k) {
+        HashSet<int> ban = new HashSet<int>(banned);
+        SortedSet<int>[] sets = new SortedSet<int>[2];
+        sets[0] = new SortedSet<int>();
+        sets[1] = new SortedSet<int>();
+        for (int i = 0; i < n; ++i) {
+            if (i != p && !ban.Contains(i)) {
+                sets[i % 2].Add(i);
+            }
+        }
+        int[] ans = new int[n];
+        Array.Fill(ans, -1);
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(p);
+        ans[p] = 0;
+        while (q.Count > 0) {
+            int i = q.Dequeue();
+            int mn = Math.Max(i - k + 1, k - i - 1);
+            int mx = Math.Min(i + k - 1, n * 2 - k - i - 1);
+            SortedSet<int> set = sets[mx % 2];
+            var toRemove = new List<int>();
+            var it = set.GetViewBetween(mn, mx).GetEnumerator();
+            while (it.MoveNext()) {
+                int current = it.Current;
+                ans[current] = ans[i] + 1;
+                q.Enqueue(current);
+                toRemove.Add(current);
+            }
+            foreach (int val in toRemove) {
+                set.Remove(val);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+* [sol1-Go]
+
+```Go
+func minReverseOperations(n int, p int, banned []int, k int) []int {
+	ban := make(map[int]bool)
+	for _, b := range banned {
+		ban[b] = true
+	}
+	sets := make([][]int, 2)
+	for i := 0; i < n; i++ {
+		if i != p && !ban[i] {
+			sets[i % 2] = append(sets[i % 2], i)
+		}
+	}
+	for i := range sets {
+		sort.Ints(sets[i])
+	}
+	ans := make([]int, n)
+	for i := range ans {
+		ans[i] = -1
+	}
+	q := []int{p}
+	ans[p] = 0
+	for len(q) > 0 {
+		i := q[0]
+		q = q[1:]
+		mn := max(i - k + 1, k - i - 1)
+		mx := min(i + k - 1, 2 * n - k - i - 1)
+		targetSet := sets[mx % 2]
+		toRemove := []int{}
+		left := sort.SearchInts(targetSet, mn)
+		right := sort.SearchInts(targetSet, mx + 1)
+		for j := left; j < right; j++ {
+			val := targetSet[j]
+			ans[val] = ans[i] + 1
+            q = append(q, val)
+			toRemove = append(toRemove, val)
+		}
+		for _, val := range toRemove {
+			idx := sort.SearchInts(targetSet, val)
+			if idx < len(targetSet) && targetSet[idx] == val {
+				targetSet = append(targetSet[:idx], targetSet[idx + 1:]...)
+			}
+		}
+		sets[mx % 2] = targetSet
+	}
+
+	return ans
+}
+```
+
+* [sol1-Python3]
+
+```Python
+class Solution:
+    def minReverseOperations(self, n: int, p: int, banned: List[int], k: int) -> List[int]:
+        ban = set(banned)
+        sets = [SortedList(), SortedList()]
+        for i in range(n):
+            if i != p and i not in ban:
+                sets[i % 2].add(i)
+        ans = [-1] * n
+        q = deque()
+        q.append(p)
+        ans[p] = 0
+        while q:
+            i = q.popleft()
+            mn = max(i - k + 1, k - i - 1)
+            mx = min(i + k - 1, 2 * n - k - i - 1)
+            target_set = sets[mx % 2]
+            to_remove = []
+            for val in target_set.irange(mn, mx):
+                ans[val] = ans[i] + 1
+                q.append(val)
+                to_remove.append(val)
+            for val in to_remove:
+                target_set.remove(val)
+                
+        return ans
+```
+
+* [sol1-Rust]
+
+```Rust
+use std::collections::{HashSet, VecDeque, BTreeSet};
+
+impl Solution {
+    pub fn min_reverse_operations(n: i32, p: i32, banned: Vec<i32>, k: i32) -> Vec<i32> {
+        let n = n as usize;
+        let p = p as usize;
+        let k = k as usize;
+        let ban: HashSet<i32> = banned.into_iter().collect();
+        let mut sets = vec![BTreeSet::new(), BTreeSet::new()];
+        for i in 0..n {
+            if i != p && !ban.contains(&(i as i32)) {
+                sets[i % 2].insert(i as i32);
+            }
+        }
+        let mut ans = vec![-1; n];
+        let mut q = VecDeque::new();
+        q.push_back(p as i32);
+        ans[p] = 0;
+        while let Some(i) = q.pop_front() {
+            let i = i as usize;
+            let mn = (i as i32 - k as i32 + 1).max(k as i32 - i as i32 - 1) as usize;
+            let mx = (i as i32 + k as i32 - 1).min(n as i32 * 2 - k as i32 - i as i32 - 1) as usize;
+            let set = &mut sets[mx % 2];
+            let mut to_remove = Vec::new();
+            for &val in set.range(mn as i32..= mx as i32) {
+                ans[val as usize] = ans[i] + 1;
+                q.push_back(val);
+                to_remove.push(val);
+            }
+            for val in to_remove {
+                set.remove(&val);
+            }
+        }
+        ans
+    }
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(n\log n)$，平衡树的每次添加删除操作需要 $O(\log n)$。
+- 空间复杂度：$O(n)$。
+
+#### 方法二：广度优先搜索 + 并查集
+
+**思路与算法**
+
+避免重复检查的另一种思路是使用并查集，已经合并的元素即被删除。如果要删除一个元素，可以将它与下一个元素合并，从而在下次删除时跳过已删除的元素。
+
+**代码**
+
+* [sol2-C++]
+
+```C++
+class Solution {
+public:
+    int find(vector<int>& f, int x) {
+        return f[x] == x ? x : f[x] = find(f, f[x]);
+    }
+    void merge(vector<int>& f, int x, int y) {
+        int fx = find(f, x), fy = find(f, y);
+        f[fx] = fy;
+    }
+    vector<int> minReverseOperations(int n, int p, vector<int>& banned, int k) {
+        vector<vector<int>> fa(2, vector<int>(n + 2));
+        iota(fa[0].begin(), fa[0].end(), 0);
+        iota(fa[1].begin(), fa[1].end(), 0);
+        for (int ban : banned) {
+            merge(fa[ban % 2], ban, ban + 2);
+        }
+        vector<int> ans(n, -1);
+        queue<int> q;
+        q.push(p);
+        ans[p] = 0;
+        merge(fa[p % 2], p, p + 2);
+        while (!q.empty()) {
+            int i = q.front();
+            q.pop();
+            int mn = max(i - k + 1, k - i - 1);
+            int mx = min(i + k - 1, n * 2 - k - i - 1);
+            for (int j = mn; j <= mx;) {
+                int fi = find(fa[mn % 2], j);
+                if (fi > mx) {
+                    break;
+                }
+                ans[fi] = ans[i] + 1;
+                q.push(fi);
+                merge(fa[mn % 2], fi, fi + 2);
+                j = fi + 2;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+* [sol2-Java]
+
+```Java
+class Solution {
+    private int find(int[] f, int x) {
+        return f[x] == x ? x : (f[x] = find(f, f[x]));
+    }
+
+    private void merge(int[] f, int x, int y) {
+        int fx = find(f, x), fy = find(f, y);
+        f[fx] = fy;
+    }
+
+    public int[] minReverseOperations(int n, int p, int[] banned, int k) {
+        int[][] fa = new int[2][n + 2];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < n + 2; j++) {
+                fa[i][j] = j;
+            }
+        }
+        for (int ban : banned) {
+            merge(fa[ban % 2], ban, ban + 2);
+        }
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(p);
+        ans[p] = 0;
+        merge(fa[p % 2], p, p + 2);
+        while (!q.isEmpty()) {
+            int i = q.poll();
+            int mn = Math.max(i - k + 1, k - i - 1);
+            int mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+            int fi = 0;
+            for (int j = mn; j <= mx; j = fi + 2) {
+                fi = find(fa[mn % 2], j);
+                if (fi > mx) {
+                    break;
+                }
+                ans[fi] = ans[i] + 1;
+                q.add(fi);
+                merge(fa[mn % 2], fi, fi + 2);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+* [sol2-C#]
+
+```C#
+public class Solution {
+    private int Find(int[] f, int x) {
+        return f[x] == x ? x : (f[x] = Find(f, f[x]));
+    }
+
+    private void Merge(int[] f, int x, int y) {
+        int fx = Find(f, x), fy = Find(f, y);
+        f[fx] = fy;
+    }
+
+    public int[] MinReverseOperations(int n, int p, int[] banned, int k) {
+        int[][] fa = new int[2][];
+        for (int i = 0; i < 2; i++) {
+            fa[i] = new int[n + 2];
+            for (int j = 0; j < n + 2; j++) {
+                fa[i][j] = j;
+            }
+        }
+        foreach (int ban in banned) {
+            Merge(fa[ban % 2], ban, ban + 2);
+        }
+        int[] ans = new int[n];
+        Array.Fill(ans, -1);
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(p);
+        ans[p] = 0;
+        Merge(fa[p % 2], p, p + 2);
+        while (q.Count > 0) {
+            int i = q.Dequeue();
+            int mn = Math.Max(i - k + 1, k - i - 1);
+            int mx = Math.Min(i + k - 1, n * 2 - k - i - 1);
+            int fi = 0;
+            for (int j = mn; j <= mx; j = fi + 2) {
+                fi = Find(fa[mn % 2], j);
+                if (fi > mx) {
+                    break;
+                }
+                ans[fi] = ans[i] + 1;
+                q.Enqueue(fi);
+                Merge(fa[mn % 2], fi, fi + 2);
+            }
+        }
+        return ans;
+    }
+}
+```
+
+* [sol2-Go]
+
+```Go
+func find(f []int, x int) int {
+	if f[x] == x {
+		return x
+	}
+	f[x] = find(f, f[x])
+	return f[x]
+}
+
+func merge(f []int, x, y int) {
+	fx := find(f, x)
+	fy := find(f, y)
+	f[fx] = fy
+}
+
+func minReverseOperations(n, p int, banned []int, k int) []int {
+	fa := make([][]int, 2)
+	for i := range fa {
+		fa[i] = make([]int, n+2)
+		for j := range fa[i] {
+			fa[i][j] = j
+		}
+	}
+	for _, ban := range banned {
+		merge(fa[ban % 2], ban, ban + 2)
+	}
+	ans := make([]int, n)
+	for i := range ans {
+		ans[i] = -1
+	}
+	q := []int{p}
+	ans[p] = 0
+	merge(fa[p % 2], p, p + 2)
+
+	for len(q) > 0 {
+		i := q[0]
+		q = q[1:]
+		mn := max(i - k + 1, k - i - 1)
+		mx := min(i + k - 1, n * 2 - k - i - 1)
+        fi := 0
+		for j := mn; j <= mx; j = fi + 2 {
+			fi = find(fa[mn % 2], j)
+			if fi > mx {
+				break
+			}
+			ans[fi] = ans[i] + 1
+			q = append(q, fi)
+			merge(fa[mn % 2], fi, fi + 2)
+		}
+	}
+
+	return ans
+}
+```
+
+* [sol2-Python3]
+
+```Python
+class Solution:
+    def minReverseOperations(self, n: int, p: int, banned: List[int], k: int) -> List[int]:
+        fa = [[i for i in range(n + 2)] for _ in range(2)]
+        for ban in banned:
+            self.merge(fa[ban % 2], ban, ban + 2)
+        ans = [-1] * n
+        q = deque()
+        q.append(p)
+        ans[p] = 0
+        self.merge(fa[p % 2], p, p + 2)
+        while q:
+            i = q.popleft()
+            mn = max(i - k + 1, k - i - 1)
+            mx = min(i + k - 1, n * 2 - k - i - 1)
+            j = mn
+            while j <= mx:
+                fi = self.find(fa[mn % 2], j)
+                if fi > mx:
+                    break
+                ans[fi] = ans[i] + 1
+                q.append(fi)
+                self.merge(fa[mn % 2], fi, fi + 2)
+                j = fi + 2
+        return ans
+
+    def find(self, f, x):
+        if f[x] == x:
+            return x
+        f[x] = self.find(f, f[x])
+        return f[x]
+
+    def merge(self, f, x, y):
+        fx = self.find(f, x)
+        fy = self.find(f, y)
+        f[fx] = fy
+```
+
+* [sol2-C]
+
+```C
+int find(int* f, int x) {
+    if (f[x] == x) {
+        return x;
+    }
+    return f[x] = find(f, f[x]);
+}
+
+void merge(int* f, int x, int y) {
+    int fx = find(f, x), fy = find(f, y);
+    f[fx] = fy;
+}
+
+int* minReverseOperations(int n, int p, int* banned, int bannedSize, int k, int* returnSize) {
+    int* fa[2];
+    for (int i = 0; i < 2; i++) {
+        fa[i] = (int*)malloc(sizeof(int) * (n + 2));
+        for (int j = 0; j < n + 2; j++) {
+            fa[i][j] = j;
+        }
+    }
+    for (int i = 0; i < bannedSize; i++) {
+        int ban = banned[i];
+        merge(fa[ban % 2], ban, ban + 2);
+    }
+    int* ans = (int*)malloc(sizeof(int) * n);
+    for (int i = 0; i < n; i++) {
+        ans[i] = -1;
+    }
+    int* q = (int*)malloc(sizeof(int) * n);
+    int front = 0, rear = 0;
+    q[rear++] = p;
+    ans[p] = 0;
+    merge(fa[p % 2], p, p + 2);
+    while (front < rear) {
+        int i = q[front++];
+        int mn = fmax(i - k + 1, k - i - 1);
+        int mx = fmin(i + k - 1, n * 2 - k - i - 1);
+        int fi = 0;
+        for (int j = mn; j <= mx; j = fi + 2) {
+            fi = find(fa[mn % 2], j);
+            if (fi > mx) {
+                break;
+            }
+            ans[fi] = ans[i] + 1;
+            q[rear++] = fi;
+            merge(fa[mn % 2], fi, fi + 2);
+        }
+    }
+    *returnSize = n;
+    for (int i = 0; i < 2; i++) {
+        free(fa[i]);
+    }
+    free(q);
+    return ans;
+}
+```
+
+* [sol2-JavaScript]
+
+```JavaScript
+const find = (f, x) => {
+    if (f[x] === x) {
+        return x;
+    }
+    return f[x] = find(f, f[x]);
+}
+
+const merge = (f, x, y) => {
+    const fx = find(f, x), fy = find(f, y);
+    f[fx] = fy;
+}
+
+var minReverseOperations = function(n, p, banned, k) {
+    const fa = Array.from({ length: 2 }, () => Array.from({ length: n + 2 }, (_, i) => i));
+    for (const ban of banned) {
+        merge(fa[ban % 2], ban, ban + 2);
+    }
+    const ans = Array(n).fill(-1);
+    const q = new Deque();
+    q.pushBack(p);
+    ans[p] = 0;
+    merge(fa[p % 2], p, p + 2);
+    while (!q.isEmpty()) {
+        const i = q.popFront();
+        const mn = Math.max(i - k + 1, k - i - 1);
+        const mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+        for (let j = mn; j <= mx;) {
+            const fi = find(fa[mn % 2], j);
+            if (fi > mx) {
+                break;
+            }
+            ans[fi] = ans[i] + 1;
+            q.pushBack(fi);
+            merge(fa[mn % 2], fi, fi + 2);
+            j = fi + 2;
+        }
+    }
+    return ans;
+}
+```
+
+* [sol2-TypeScript]
+
+```TypeScript
+const find = (f: number[], x: number): number => {
+    if (f[x] === x) {
+        return x;
+    }
+    return f[x] = find(f, f[x]);
+};
+
+const merge = (f: number[], x: number, y: number): void => {
+    const fx = find(f, x), fy = find(f, y);
+    f[fx] = fy;
+};
+
+const minReverseOperations = (n: number, p: number, banned: number[], k: number): number[] => {
+    const fa: number[][] = Array.from({ length: 2 }, () => 
+        Array.from({ length: n + 2 }, (_, i) => i)
+    );
+    for (const ban of banned) {
+        merge(fa[ban % 2], ban, ban + 2);
+    }
+    const ans: number[] = Array(n).fill(-1);
+    const q = new Deque();
+    q.pushBack(p);
+    ans[p] = 0;
+    merge(fa[p % 2], p, p + 2);
+    while (!q.isEmpty()) {
+        const i = q.popFront()!;
+        const mn = Math.max(i - k + 1, k - i - 1);
+        const mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+        for (let j = mn; j <= mx;) {
+            const fi = find(fa[mn % 2], j);
+            if (fi > mx) {
+                break;
+            }
+            ans[fi] = ans[i] + 1;
+            q.pushBack(fi);
+            merge(fa[mn % 2], fi, fi + 2);
+            j = fi + 2;
+        }
+    }
+    return ans;
+};
+```
+
+* [sol2-Rust]
+
+```Rust
+use std::collections::VecDeque;
+
+impl Solution {
+    fn find(f: &mut Vec<usize>, x: usize) -> usize {
+        if f[x] == x {
+            return x;
+        }
+        f[x] = Self::find(f, f[x]);
+        f[x]
+    }
+
+    fn merge(f: &mut Vec<usize>, x: usize, y: usize) {
+        let fx = Self::find(f, x);
+        let fy = Self::find(f, y);
+        f[fx] = fy;
+    }
+
+    pub fn min_reverse_operations(n: i32, p: i32, banned: Vec<i32>, k: i32) -> Vec<i32> {
+        let n = n as usize;
+        let p = p as usize;
+        let k = k as usize;
+        let mut fa = vec![vec![0; n + 2], vec![0; n + 2]];
+        for i in 0..2 {
+            for j in 0..n + 2 {
+                fa[i][j] = j;
+            }
+        }
+        for &ban in &banned {
+            let ban = ban as usize;
+            Self::merge(&mut fa[ban % 2], ban, ban + 2);
+        }
+        let mut ans = vec![-1; n];
+        let mut q = VecDeque::new();
+        q.push_back(p);
+        ans[p] = 0;
+        Self::merge(&mut fa[p % 2], p, p + 2);
+        while let Some(i) = q.pop_front() {
+            let mn = (i as i32 - k as i32 + 1).max(k as i32 - i as i32 - 1) as usize;
+            let mx = (i as i32 + k as i32 - 1).min(n as i32 * 2 - k as i32 - i as i32 - 1) as usize;
+            let mut j = mn;
+            while j <= mx {
+                let fi = Self::find(&mut fa[mn % 2], j);
+                if fi > mx {
+                    break;
+                }
+                ans[fi] = ans[i] + 1;
+                q.push_back(fi);
+                Self::merge(&mut fa[mn % 2], fi, fi + 2);
+                j = fi + 2;
+            }
+        }
+        ans
+    }
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(n\alpha(n))$，其中 $\alpha(n)$ 是反阿克曼函数。并查集的每次查找与合并操作均摊时间复杂度为 $O(\alpha(n))$。
+- 空间复杂度：$O(n)$。
+

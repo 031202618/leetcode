@@ -1,0 +1,103 @@
+    class Solution {
+        static final int MOD = 1_000_000_007;
+
+        Long[][][] cache;
+        int[][] grid;
+        int r;
+        int c;
+
+        public int maxProductPath(int[][] grid) {
+            if (grid.length == 0) return 0;
+            int r = grid.length;
+            int c = grid[0].length;
+            cache = new Long[r][c][2];
+            for (int i = 0; i < r; i++) {
+                for (int j = 0; j < c; j++) {
+                    cache[i][j] = null;
+                }
+            }
+            this.grid = grid;
+            Long[] dfs = dfs(r - 1, c - 1);
+            if (dfs[1] != null) {
+                return dfs[1].intValue();
+            } else if (dfs[2] != null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        }
+
+        private Long[] dfs(int r, int c) {
+            if (cache[r][c] != null) return cache[r][c];
+            long v = grid[r][c];
+            Long pos = v > 0 ? v : null;
+            Long neg = v < 0 ? -v : null;
+            Long zero = v == 0 ? 0L : null;
+            if (r == 0 && c == 0) {
+                return new Long[]{neg, pos, zero};
+            }
+            if (v == 0) {
+                return new Long[]{null, null, 0L};
+            }
+            Long[] ret = new Long[3];
+            int[][] dir = new int[][]{{-1, 0}, {0, -1}};
+            Long p = null;
+            Long n = null;
+            for (int[] d : dir) {
+                int x = r + d[0];
+                int y = c + d[1];
+                if (x >= 0 && y >= 0) {
+                    Long[] dfs = dfs(x, y);
+                    if (pos != null && dfs[0] != null) {
+                        if (n == null) {
+                            n = dfs[0] * pos;
+                        } else {
+                            n = Math.max(n, dfs[0] * pos);
+                        }
+                    }
+                    if (pos != null && dfs[1] != null) {
+                        if (p == null) {
+                            p = dfs[1] * pos;
+                        } else {
+                            p = Math.max(p, dfs[1] * pos);
+                        }
+                    }
+                    if (neg != null && dfs[0] != null) {
+                        if (p == null) {
+                            p = dfs[0] * neg;
+                        } else {
+                            p = Math.max(p, dfs[0] * neg);
+                        }
+                    }
+                    if (neg != null && dfs[1] != null) {
+                        if (n == null) {
+                            n = dfs[1] * neg;
+                        } else {
+                            n = Math.max(n, dfs[1] * neg);
+                        }
+                    }
+                    if (dfs[2] != null) {
+                        ret[2] = 0L;
+                    }
+                }
+            }
+            if(p != null){
+                p %= MOD;
+            }
+            if(n != null){
+                n %= MOD;
+            }
+            ret[1] = p;
+            ret[0] = n;
+            cache[r][c] = ret;
+            return ret;
+        }
+
+    }
+
+//total_testcases:159
+//total_correct:144
+//input_formatted:[[1,-1,0,-3,4,3,-3,3,-1,3,0,0,-4,2],[2,-2,-3,-4,0,-2,-3,3,1,4,1,-3,-1,-4],[-4,4,-4,-4,2,-4,3,0,-2,-4,3,4,-1,0],[-3,3,-4,-4,3,4,4,1,-1,-1,0,3,4,1],[1,3,-4,2,2,-3,1,-3,-4,-4,-1,-4,-4,4],[1,1,-1,1,-1,-1,3,-4,-1,2,-2,3,-4,0],[1,0,3,3,1,4,1,1,-4,-1,-3,4,-4,4],[4,3,2,3,0,-1,2,-4,1,0,0,1,3,4],[-4,4,-4,-4,2,-2,2,-1,0,-2,2,4,-2,-1],[-2,3,4,-4,3,3,-2,-1,0,-3,4,-2,-1,-4],[4,3,3,3,-3,1,2,-4,-1,4,-3,-3,2,0],[3,3,0,1,-4,-4,-3,3,-2,-4,2,4,-3,3],[-3,0,1,3,0,0,0,-4,-1,4,-1,-3,1,1],[-1,4,0,-3,1,-3,-1,2,1,-3,-1,-4,4,1]]
+//expected_output:31136867
+//code_output:919261412
+//last_testcase:[[1,-1,0,-3,4,3,-3,3,-1,3,0,0,-4,2],[2,-2,-3,-4,0,-2,-3,3,1,4,1,-3,-1,-4],[-4,4,-4,-4,2,-4,3,0,-2,-4,3,4,-1,0],[-3,3,-4,-4,3,4,4,1,-1,-1,0,3,4,1],[1,3,-4,2,2,-3,1,-3,-4,-4,-1,-4,-4,4],[1,1,-1,1,-1,-1,3,-4,-1,2,-2,3,-4,0],[1,0,3,3,1,4,1,1,-4,-1,-3,4,-4,4],[4,3,2,3,0,-1,2,-4,1,0,0,1,3,4],[-4,4,-4,-4,2,-2,2,-1,0,-2,2,4,-2,-1],[-2,3,4,-4,3,3,-2,-1,0,-3,4,-2,-1,-4],[4,3,3,3,-3,1,2,-4,-1,4,-3,-3,2,0],[3,3,0,1,-4,-4,-3,3,-2,-4,2,4,-3,3],[-3,0,1,3,0,0,0,-4,-1,4,-1,-3,1,1],[-1,4,0,-3,1,-3,-1,2,1,-3,-1,-4,4,1]]

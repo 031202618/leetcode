@@ -1,0 +1,109 @@
+灵神dp题单打卡。
+
+# 思路
+
+我们要先知道一个点：能被3整除的数的特征是，一个数的各个数位上的数字相加的和如果是3的倍数，则这个数也一定是3的倍数。
+
+题目并未要求顺序，由于要找最大的数，我们可以给他先排个序，因为要得到最大的，我们应该先取大的数，才能够最大。并且这个可以被3整除的字符串改变顺序扔然可被3整除。
+
+由于排序保证了优选最大的，那么我们接下来可以求出这个排序后的子序列的最大长度，思路很类似于1262. 可被三整除的最大和 。
+
+定义状态方程：
+$f[i][j]$代表了选到第$i$个数的余数为$j$子序列的最大长度。
+- 如果不选当前位置,余数也不会发生改变：
+  $f[i][j] = f[i - 1][j]$
+- 如果选当前位置:
+  $$f[i][j] = f[i - 1][ \ (j \ + \ digits[i]) \ mod \ 3] + 1 $$
+
+最后可以根据f知道如何走到最长路径的，需要知道两个点：
+1. 长度越大的数，值越大
+2. 长度相同的数，对应数位大，那么值越大
+
+由于我们dp求出了最长的子序列长度，那么我们可以从后往前的构建答案，构建答案其实就是我们dp状态转移的过程。
+
+比如：
+刚开始我们一定是从$i = n,j = 0$开始构建的，因为排序后，数值更大的在后面，并且一开始我们一个数都没有，相当与当前数为$0$，那么它对$3$取余自然也为$0$。
+
+继续，由于dp表我们是偏移了一位,那么dp表的$i$对应了digits数组的$i - 1$位置，我们在$i$位置时，需要判断在当前位置是否能够填$digits[i - 1]$这个数字，方法就是$i = n - 1,j0 = j + digits[i - 1]) % 3$是否可以转移到$i = n,j = 0$，如果能够转移，那么就更新为$i和j$即可。
+
+举个例子：
+
+* 
+
+```
+digits = [1,8,9]
+他的f数组为：
+[[0, -inf, -inf],
+[0, 1,    -inf]
+[2, 1,     1]
+[3, 2,     2]]
+
+初始 i = 3,j = 0
+可以看到 如果我们填digits[i - 1]，也就是digits[2] ,
+f[2][0]是能够转移到f[3][0]的，也就是f[3][0] = f[2][0] + 1
+
+```
+
+# Code
+
+* []
+
+```C++
+class Solution {
+public:
+    string largestMultipleOfThree(vector<int>& digits) {
+
+        int n = digits.size();
+        ranges::sort(digits);
+        vector<vector<int>> f(n+1, vector<int>(3));
+        f[0][1] = INT_MIN,f[0][2] = INT_MIN;
+        for (int i = 0; i < n; ++ i) {
+            for (int j = 0; j <= 2; ++ j) {
+                f[i+1][j] = max(f[i][j], f[i][(j + digits[i]) % 3]+1);    
+            }
+        }
+        if(f[n][0] == 0) return "";
+        //根据路径还原。
+        string res;
+        for(int i = n,j = 0;i > 0; i--){
+            if(f[i][j] == f[i - 1][(j + digits[i - 1]) % 3] + 1){
+                res += to_string(digits[i - 1]);
+                j  = (j + digits[i - 1]) % 3;
+            }
+        }
+        if(res[0] == '0') return "0";
+        return res;
+    }
+};
+```
+
+* []
+
+```python
+class Solution:
+    def largestMultipleOfThree(self, digits: List[int]) -> str:
+        """
+            优先选大的
+        """
+        digits.sort()
+        n = len(digits)
+        f = [[0,-inf,-inf] for _ in range(n + 1)]
+        for i in range(n):
+            f[i + 1][0] = max(f[i][0],1 + f[i][(0 - digits[i]) % 3])
+            f[i + 1][1] = max(f[i][1],1 + f[i][(1 - digits[i]) % 3])
+            f[i + 1][2] = max(f[i][2],1 + f[i][(2 - digits[i]) % 3])
+        if f[-1][0] == 0:
+            return ""
+        #根据路径进行还原
+        res = ""
+        j = 0
+        for i in range(n,-1,-1):
+            #如过f[i][j]是由f[i - 1][j0]转移过来的，那么拼出结果
+            if f[i][j] == f[i - 1][(j - digits[i - 1]) % 3] + 1:
+                res += str(digits[i - 1])
+                j = (j - digits[i - 1]) % 3
+        if res[0] == '0': return '0'
+        return res
+
+```
+

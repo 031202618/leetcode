@@ -1,0 +1,40 @@
+> Problem: [6941. 将三个组排序](https://leetcode.cn/problems/sorting-three-groups/description/)
+
+### 解题思路
+
+- `dp[1]`    以数字1为结尾时的最长非递减子序列的长度，也就是数字为1的数量
+- `dp[2]`    以数字2为结尾时的最长非递减子序列的长度，或者是以数字1为结尾时的最长非递减子序列的长度，取两者中的最大值。
+
+- `dp[3]`    比较以数字3为结尾时的最长非递减子序列的长度、以数字2为结尾时的最长非递减子序列的长度、和以数字1为结尾时的最长非递减子序列的长度， 取三者中的最大值。
+
+  最后 n - 最长非递减子序列的长度即为答案。
+
+# 复杂度
+
+- 时间复杂度: O(n)
+
+- 空间复杂度: O(1)
+
+# Code
+
+* Java
+
+```Java
+
+class Solution {
+    public int minimumOperations(List<Integer> nums) {
+
+      int[] dp = new int[4];
+      
+      for(int x:nums){
+         dp[x]++;
+         dp[2] = Math.max(dp[1], dp[2]);
+         dp[3] = Math.max(dp[2], dp[3]);
+      }
+      
+      return nums.size() - dp[3];      
+    }
+}
+
+```
+

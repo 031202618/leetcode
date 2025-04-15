@@ -1,0 +1,10 @@
+* python3
+
+```python
+class Solution:
+    def minimumSum(self, n: int, k: int) -> int:
+        if k>(2*n-1) or k<3:
+            return n*(n+1)//2
+        return n*(n+1)//2+(n-k//2)*((k-1)//2)
+```
+
