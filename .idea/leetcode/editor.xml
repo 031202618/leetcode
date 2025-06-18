@@ -124,6 +124,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID1295FindNumbersWithEvenNumberOfDigits.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID1295FindNumbersWithEvenNumberOfDigits.md" />
+              <option name="frontendQuestionId" value="leetcode.cn1295" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID1295FindNumbersWithEvenNumberOfDigits.java" />
+              <option name="titleSlug" value="find-numbers-with-even-number-of-digits" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID12IntegerToRoman .java">
           <value>
             <LeetcodeEditor>
@@ -198,6 +209,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID1395CountNumberOfTeams.java" />
               <option name="titleSlug" value="count-number-of-teams" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID1399CountLargestGroup.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID1399CountLargestGroup.md" />
+              <option name="frontendQuestionId" value="leetcode.cn1399" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID1399CountLargestGroup.java" />
+              <option name="titleSlug" value="count-largest-group" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -487,6 +509,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID1920BuildArrayFromPermutation.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID1920BuildArrayFromPermutation.md" />
+              <option name="frontendQuestionId" value="leetcode.cn1920" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID1920BuildArrayFromPermutation.java" />
+              <option name="titleSlug" value="build-array-from-permutation" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID1955CountNumberOfSpecialSubsequences.java">
           <value>
             <LeetcodeEditor>
@@ -616,6 +649,28 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2140SolvingQuestionsWithBrainpower.java" />
               <option name="titleSlug" value="solving-questions-with-brainpower" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2145CountTheHiddenSequences.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2145CountTheHiddenSequences.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2145" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2145CountTheHiddenSequences.java" />
+              <option name="titleSlug" value="count-the-hidden-sequences" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2176CountEqualAndDivisiblePairsInAnArray.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2176CountEqualAndDivisiblePairsInAnArray.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2176" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2176CountEqualAndDivisiblePairsInAnArray.java" />
+              <option name="titleSlug" value="count-equal-and-divisible-pairs-in-an-array" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -751,6 +806,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2338CountTheNumberOfIdealArrays.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2338CountTheNumberOfIdealArrays.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2338" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2338CountTheNumberOfIdealArrays.java" />
+              <option name="titleSlug" value="count-the-number-of-ideal-arrays" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2353DesignAFoodRatingSystem.java">
           <value>
             <LeetcodeEditor>
@@ -759,6 +825,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2353DesignAFoodRatingSystem.java" />
               <option name="titleSlug" value="design-a-food-rating-system" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2364CountNumberOfBadPairs.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2364CountNumberOfBadPairs.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2364" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2364CountNumberOfBadPairs.java" />
+              <option name="titleSlug" value="count-number-of-bad-pairs" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -828,6 +905,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2537CountTheNumberOfGoodSubarrays.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2537CountTheNumberOfGoodSubarrays.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2537" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2537CountTheNumberOfGoodSubarrays.java" />
+              <option name="titleSlug" value="count-the-number-of-good-subarrays" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2547MinimumCostToSplitAnArray.java">
           <value>
             <LeetcodeEditor>
@@ -836,6 +924,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2547MinimumCostToSplitAnArray.java" />
               <option name="titleSlug" value="minimum-cost-to-split-an-array" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2563CountTheNumberOfFairPairs.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2563CountTheNumberOfFairPairs.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2563" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2563CountTheNumberOfFairPairs.java" />
+              <option name="titleSlug" value="count-the-number-of-fair-pairs" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -1004,6 +1103,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2799CountCompleteSubarraysInAnArray.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2799CountCompleteSubarraysInAnArray.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2799" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2799CountCompleteSubarraysInAnArray.java" />
+              <option name="titleSlug" value="count-complete-subarrays-in-an-array" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2826SortingThreeGroups.java">
           <value>
             <LeetcodeEditor>
@@ -1059,6 +1169,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2901LongestUnequalAdjacentGroupsSubsequenceIi.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2901LongestUnequalAdjacentGroupsSubsequenceIi.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2901" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2901LongestUnequalAdjacentGroupsSubsequenceIi.java" />
+              <option name="titleSlug" value="longest-unequal-adjacent-groups-subsequence-ii" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2911MinimumChangesToMakeKSemiPalindromes.java">
           <value>
             <LeetcodeEditor>
@@ -1089,6 +1210,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2944MinimumNumberOfCoinsForFruits.java" />
               <option name="titleSlug" value="minimum-number-of-coins-for-fruits" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID2962CountSubarraysWhereMaxElementAppearsAtLeastKTimes.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID2962CountSubarraysWhereMaxElementAppearsAtLeastKTimes.md" />
+              <option name="frontendQuestionId" value="leetcode.cn2962" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID2962CountSubarraysWhereMaxElementAppearsAtLeastKTimes.java" />
+              <option name="titleSlug" value="count-subarrays-where-max-element-appears-at-least-k-times" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -1323,6 +1455,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID3342FindMinimumTimeToReachLastRoomIi.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID3342FindMinimumTimeToReachLastRoomIi.md" />
+              <option name="frontendQuestionId" value="leetcode.cn3342" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID3342FindMinimumTimeToReachLastRoomIi.java" />
+              <option name="titleSlug" value="find-minimum-time-to-reach-last-room-ii" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID3396MinimumNumberOfOperationsToMakeElementsInArrayDistinct.java">
           <value>
             <LeetcodeEditor>
@@ -1529,6 +1672,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID855ExamRoom.java" />
               <option name="titleSlug" value="exam-room" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/leetcode/editor/cn/ID871MinimumNumberOfRefuelingStops.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/src/leetcode/editor/cn/doc/content/ID871MinimumNumberOfRefuelingStops.md" />
+              <option name="frontendQuestionId" value="leetcode.cn871" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/src/leetcode/editor/cn/ID871MinimumNumberOfRefuelingStops.java" />
+              <option name="titleSlug" value="minimum-number-of-refueling-stops" />
             </LeetcodeEditor>
           </value>
         </entry>
